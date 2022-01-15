@@ -3,7 +3,7 @@ import requests as req
 import pandas as pd
 import re
 
-regex_href = re.compile(r'tel:[\d\+\ \_\(\)\.\{\}\%\$\@\#\~-]+')
+regex_href = re.compile(r'(tel:|Tel:|TEL:)[\d\+\ \_\(\)\.\{\}\%\$\@\#\~-]+')
 regex_phone = r"([\d\+\ \_\(\)\.\{\}-]+)"
 filename = input('Enter your excel file name with extensions : ')
 data = pd.read_excel(filename).fillna('').to_numpy()
@@ -32,7 +32,7 @@ for row in data:
             if re.findall(regex_href, a['href']):
                 print(a['href'])
                 result = a['href']
-                row[1] = f'{row[1]} | {result} | {a.text}'
+                row[1] = f'{row[1]} | {result}'
         if row[1] != '':
             row[2] = 'Yes'
             row[3] = 'Yes'
@@ -60,8 +60,20 @@ for row in data:
                         row[2] = 'Yes'
                         row[3] = 'Yes'
                     else:
-                        row[2] = 'No'
-                        row[3] = 'Yes'
+                        tag_p = soup.find_all('p')
+                        for p in tag_p:
+                            for math_p in re.findall(regex_phone, p.text):
+                                if len(math_p.strip()) > 8:
+                                    result = math_p.strip()
+                                    print(result)
+                                    row[1] = f'{row[1]} | {result}'
+                            if row[1] != '':
+                                row[2] = 'Yes'
+                                row[3] = 'Yes'
+                            else:
+                                row[1] = 'Not Found'
+                                row[2] = 'No'
+                                row[3] = 'Yes'
             except AttributeError as e:
                 print(e)
         rows_number += 1

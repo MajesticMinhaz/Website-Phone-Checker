@@ -34,8 +34,7 @@ for row in data:
                 result = a['href']
                 row[1] = f'{row[1]} | {result}'
         if row[1] != '':
-            row[2] = 'Yes'
-            row[3] = 'Yes'
+            pass
         else:
             try:
                 tag_header = soup.find_all('header')
@@ -46,8 +45,7 @@ for row in data:
                             print(result)
                             row[1] = f'{row[1]} | {result}'
                 if row[1] != '':
-                    row[2] = 'Yes'
-                    row[3] = 'Yes'
+                    pass
                 else:
                     tag_span = soup.find_all('span')
                     for span in tag_span:
@@ -57,8 +55,7 @@ for row in data:
                                 print(result)
                                 row[1] = f'{row[1]} | {result}'
                     if row[1] != '':
-                        row[2] = 'Yes'
-                        row[3] = 'Yes'
+                        pass
                     else:
                         tag_p = soup.find_all('p')
                         for p in tag_p:
@@ -67,19 +64,20 @@ for row in data:
                                     result = math_p.strip()
                                     print(result)
                                     row[1] = f'{row[1]} | {result}'
-                            if row[1] != '':
-                                row[2] = 'Yes'
-                                row[3] = 'Yes'
-                            else:
-                                row[1] = 'Not Found'
-                                row[2] = 'No'
-                                row[3] = 'Yes'
             except AttributeError as e:
                 print(e)
         rows_number += 1
     except Exception as e:
         print(e)
         rows_number += 1
+for line in data:
+    if len(line[1]) > 0:
+        line[2] = 'Yes'
+        line[3] = 'Yes'
+    elif len(line[1]) == 0:
+        line[2] = 'No'
+        line[3] = 'Yes'
+
 df = pd.DataFrame(data, columns=['Websites', 'Phone', 'Suitable', 'Tool'])
 df.to_excel('result.xlsx', index=False)
 print(df.info())

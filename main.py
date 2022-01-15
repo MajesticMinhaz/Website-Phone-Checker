@@ -32,7 +32,7 @@ for row in data:
             if re.findall(regex_href, a['href']):
                 print(a['href'])
                 result = a['href']
-                row[1] = f'{row[1]} | {result}'
+                row[1] = f'{row[1]} | {result} | {a.text}'
         if row[1] != '':
             row[2] = 'Yes'
             row[3] = 'Yes'
@@ -41,7 +41,7 @@ for row in data:
                 tag_header = soup.find_all('header')
                 for phone in tag_header:
                     for match_header in re.findall(regex_phone, phone.text):
-                        if len(match_header) > 8:
+                        if len(match_header.strip()) > 8:
                             result = match_header.strip()
                             print(result)
                             row[1] = f'{row[1]} | {result}'
@@ -52,7 +52,7 @@ for row in data:
                     tag_span = soup.find_all('span')
                     for span in tag_span:
                         for match_span in re.findall(regex_phone, span.text):
-                            if len(match_span) > 8:
+                            if len(match_span.strip()) > 8:
                                 result = match_span.strip()
                                 print(result)
                                 row[1] = f'{row[1]} | {result}'

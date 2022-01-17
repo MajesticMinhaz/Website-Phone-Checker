@@ -78,7 +78,7 @@ for line in data:
         line[2] = 'Yes'
         line[3] = 'Yes'
     elif len(line[1]) == 0:
-        line[2] = 'No'
+        line[2] = 'Manual Review'
         line[3] = 'Yes'
 
 df = pd.DataFrame(data, columns=['Websites', 'Phone', 'Suitable', 'Tool'])

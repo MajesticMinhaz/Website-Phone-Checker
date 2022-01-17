@@ -34,7 +34,7 @@ for row in data:
                 result = a['href']
                 row[1] = f'{row[1]} | {result}'
         if row[1] != '':
-            pass
+            continue
         else:
             try:
                 tag_header = soup.find_all('header')
@@ -45,7 +45,7 @@ for row in data:
                             print(result)
                             row[1] = f'{row[1]} | {result}'
                 if row[1] != '':
-                    pass
+                    continue
                 else:
                     tag_span = soup.find_all('span')
                     for span in tag_span:
@@ -55,7 +55,7 @@ for row in data:
                                 print(result)
                                 row[1] = f'{row[1]} | {result}'
                     if row[1] != '':
-                        pass
+                        continue
                     else:
                         tag_p = soup.find_all('p')
                         for p in tag_p:

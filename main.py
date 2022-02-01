@@ -24,52 +24,56 @@ rows_number = 2
 for row in data:
     try:
         print(f'Currently checking this row[{rows_number}]: {row[0]}')
-        res = req.get(row[0])
-        content = res.content
-        soup = BeautifulSoup(content, 'html.parser')
-        tag_a = soup.find_all('a')
-        for a in tag_a:
-            if re.findall(regex_href, a['href']):
-                print(a['href'])
-                result = a['href']
-                row[1] = f'{row[1]} | {result}'
-        if row[1] != '':
-            rows_number += 1
-            continue
-        else:
-            try:
-                tag_header = soup.find_all('header')
-                for phone in tag_header:
-                    for match_header in re.findall(regex_phone, phone.text):
-                        if len(match_header.strip()) > 8:
-                            result = match_header.strip()
-                            print(result)
-                            row[1] = f'{row[1]} | {result}'
-                if row[1] != '':
-                    rows_number += 1
-                    continue
-                else:
-                    tag_span = soup.find_all('span')
-                    for span in tag_span:
-                        for match_span in re.findall(regex_phone, span.text):
-                            if len(match_span.strip()) > 8:
-                                result = match_span.strip()
+        res = req.get(row[0], timeout=10)
+        try:
+            content = res.content
+            soup = BeautifulSoup(content, 'html.parser')
+            tag_a = soup.find_all('a')
+            for a in tag_a:
+                if re.findall(regex_href, a['href']):
+                    print(a['href'])
+                    result = a['href']
+                    row[1] = f'{row[1]} | {result}'
+            if row[1] != '':
+                rows_number += 1
+                continue
+            else:
+                try:
+                    tag_header = soup.find_all('header')
+                    for phone in tag_header:
+                        for match_header in re.findall(regex_phone, phone.text):
+                            if len(match_header.strip()) > 8:
+                                result = match_header.strip()
                                 print(result)
                                 row[1] = f'{row[1]} | {result}'
                     if row[1] != '':
                         rows_number += 1
                         continue
                     else:
-                        tag_p = soup.find_all('p')
-                        for p in tag_p:
-                            for math_p in re.findall(regex_phone, p.text):
-                                if len(math_p.strip()) > 8:
-                                    result = math_p.strip()
+                        tag_span = soup.find_all('span')
+                        for span in tag_span:
+                            for match_span in re.findall(regex_phone, span.text):
+                                if len(match_span.strip()) > 8:
+                                    result = match_span.strip()
                                     print(result)
                                     row[1] = f'{row[1]} | {result}'
-            except AttributeError as e:
-                print(e)
-        rows_number += 1
+                        if row[1] != '':
+                            rows_number += 1
+                            continue
+                        else:
+                            tag_p = soup.find_all('p')
+                            for p in tag_p:
+                                for math_p in re.findall(regex_phone, p.text):
+                                    if len(math_p.strip()) > 8:
+                                        result = math_p.strip()
+                                        print(result)
+                                        row[1] = f'{row[1]} | {result}'
+                except AttributeError as e:
+                    print(e)
+            rows_number += 1
+        except WindowsError:
+            print("This website freeze. So it's skipped.")
+            rows_number += 1
     except Exception as e:
         print(e)
         rows_number += 1

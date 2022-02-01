@@ -24,7 +24,7 @@ rows_number = 2
 for row in data:
     try:
         print(f'Currently checking this row[{rows_number}]: {row[0]}')
-        res = req.get(row[0], timeout=10)
+        res = req.get(row[0], timeout=30)
         try:
             content = res.content
             soup = BeautifulSoup(content, 'html.parser')

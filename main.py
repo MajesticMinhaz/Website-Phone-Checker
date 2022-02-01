@@ -71,8 +71,8 @@ for row in data:
                 except AttributeError as e:
                     print(e)
             rows_number += 1
-        except WindowsError:
-            print("This website freeze. So it's skipped.")
+        except AttributeError as e:
+            print("This website freeze. So it's skipped.", e)
             rows_number += 1
     except Exception as e:
         print(e)
